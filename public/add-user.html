@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="add-user.css" rel="stylesheet" />
+
+    <title>Add user - Studietid</title>
+</head>
+
+<body>
+    <h1>Add user</h1>
+    <form>
+        <label>First name</label>
+        <input type="text" id="first_name" required /> <br>
+
+        <label>Last name</label>
+        <input type="text" id="last_name" required /> <br>
+
+        <label>E-Mail</label>
+        <input type="text" id="email" required /> <br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <div class="error" id="error"></div>
+    <div class="success" id="success"></div>
+
+    <script src="add-user.js"></script>
+</body>
+</html>
