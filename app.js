@@ -18,6 +18,10 @@ app.get("/add-user", (req, res) => {
     res.sendFile(path.join(staticPath, "add-user.html"));
 });
 
+app.get("/register-activity", (req, res) => {
+    res.sendFile(path.join(staticPath, "register-activity.html"));
+});
+
 
 /////////
 // API //
