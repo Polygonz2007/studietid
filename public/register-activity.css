@@ -1,0 +1,15 @@
+
+select {
+    display: block;
+    margin-bottom: 1em;
+}
+
+input {
+    display: block;
+    margin-bottom: 1.5em;
+}
+
+select {
+    display: block;
+    margin-bottom: 1.5em;
+}

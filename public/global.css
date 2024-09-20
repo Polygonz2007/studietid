@@ -1,0 +1,32 @@
+/* This CSS is put on every page of this website. */
+
+body {
+    background-color: #F4F5F8;
+    font-family: "Montserrat";
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    background-color: #FFF;
+
+    width: 24em;
+    margin: auto auto;
+    padding: 2em 1.5em;
+    border-radius: 0.5em;
+}
+
+input {
+    appearance: none;
+    background-color: #E0E8FF;
+
+    width: 100%;
+    padding: 0.3em 0.5em;
+    box-sizing: border-box;
+}
+
+label {
+    margin-bottom: 0.5em;
+}

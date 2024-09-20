@@ -3,10 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="register-activity.css" rel="stylesheet" />
+    <link href="global.css" rel="stylesheet" />
+
     <title>Registrer studietid</title>
 </head>
 
 <body>
-    <h1>Regisrer studietid</h1>
+    <h1>Registrer studietid</h1>
+
+    <form>
+        <!-- Room -->
+        <label>Rom</label>
+        <select name="rom" id="room">
+            <option value="" selected="selected" id="none">Velg rom</option>
+        </select>
+
+        <!-- Subject -->
+         <label>Fag</label>
+        <select name="fag" id="subject">
+            <option value="" selected="selected" id="none">Velg fag</option>
+        </select>
+
+        <!-- Goal -->
+         <label>Mål med økten</label>
+        <input type="text" id="goal"></input>
+
+        <button>Registrer</button>
+    </form>
+    
 </body>
+
+<script src="./register-activity.js"></script>
 </html>

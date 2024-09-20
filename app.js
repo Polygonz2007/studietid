@@ -26,13 +26,32 @@ app.get("/register-activity", (req, res) => {
 /////////
 // API //
 app.get("/get_users", (req, res) => {
-    console.log("/api/get_users/");
+    console.log("/get_users/");
 
     const sql = db.prepare("SELECT user.id as userid, firstname, lastname, role.name as role FROM user inner join role on user.idrole = role.id");
     let rows = sql.all()
     console.log("rows.length", rows.length);
 
     res.send(rows);
+});
+
+app.get("/get_options", (req, res) => {
+    console.log("/get_rooms");
+
+    let result = {
+        "rooms": null,
+        "subjects": null
+    };
+
+    const sqlRooms = db.prepare("SELECT * FROM room");
+    const rooms = sqlRooms.all();
+    result.rooms = rooms;
+
+    const sqlSubjects = db.prepare("SELECT * FROM subject");
+    const subjects = sqlSubjects.all();
+    result.subjects = subjects;
+
+    res.send(result);
 });
 
 app.post("/add_user", (req, res) => {

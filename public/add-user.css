@@ -2,3 +2,12 @@
 label {
     float: left;
 }
+
+input {
+    margin-bottom: 1.5em;
+}
+
+p {
+    margin: auto 0;
+    color: #333;
+}
