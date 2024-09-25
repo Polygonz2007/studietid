@@ -1,10 +1,8 @@
 // Get stuff
 const doc = document;
 let form = doc.querySelector("form");
-
-let roomSelect = doc.getElementById("room");
-let subjectSelect = doc.getElementById("subject");
 let btn = doc.querySelector("button");
+
 
 // Fill in the options in the form
 fetchOptions();
@@ -17,8 +15,10 @@ async function register(event) {
     console.log("Register this stuff")
 
     const payload = {
-        room: roomSelect.value,
-        subject: subjectSelect.value
+        userId: 1,
+        room: form.room.selectedIndex - 1,
+        subject: form.subject.selectedIndex - 1,
+        goal: form.goal.value
     };
 
     console.log(payload);
@@ -26,7 +26,7 @@ async function register(event) {
     console.log("doin request")
 
     try {
-        const response = await fetch("/add_user", {
+        const response = await fetch("/add_activity", {
             method: "POST",
             headers: {"Content-type": "application/json"},
             body: JSON.stringify(payload)
@@ -65,7 +65,7 @@ async function fetchOptions() {
             option.name = data.rooms[i].name;
             option.innerHTML = data.rooms[i].name;
             option.id = data.rooms[i].id;
-            roomSelect.appendChild(option);
+            form.room.appendChild(option);
         }
 
         // Subjects
@@ -74,7 +74,7 @@ async function fetchOptions() {
             option.name = data.subjects[i].name;
             option.innerHTML = data.subjects[i].name;
             option.id = data.subjects[i].id;
-            subjectSelect.appendChild(option);
+            form.subject.appendChild(option);
         }
 
     } catch (error) {

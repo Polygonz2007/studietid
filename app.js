@@ -67,6 +67,20 @@ app.post("/add_user", (req, res) => {
     else
         res.json("Added user successfully.");
 });
+
+app.post("/add_activity", (req, res) => {
+    console.log("We got.. something");
+    console.log(req.body);
+    console.log("\nReceived request for adding new activity user.");
+
+    req = req.body;
+
+    const result = begin_activity();
+    if (result.error)
+        res.json(result);
+    else
+        res.json("Added user successfully.");
+});
 // END API //
 /////////////
 

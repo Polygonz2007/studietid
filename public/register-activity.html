@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link href="https://fonts.googleapis.com/css?family=League Spartan" rel="stylesheet">
+
     <link href="register-activity.css" rel="stylesheet" />
     <link href="global.css" rel="stylesheet" />
 
@@ -16,19 +18,19 @@
     <form>
         <!-- Room -->
         <label>Rom</label>
-        <select name="rom" id="room">
+        <select name="rom" id="room" required>
             <option value="" selected="selected" id="none">Velg rom</option>
         </select>
 
         <!-- Subject -->
          <label>Fag</label>
-        <select name="fag" id="subject">
+        <select name="fag" id="subject" required>
             <option value="" selected="selected" id="none">Velg fag</option>
         </select>
 
         <!-- Goal -->
          <label>Mål med økten</label>
-        <input type="text" id="goal"></input>
+        <input type="text" id="goal" required></input>
 
         <button>Registrer</button>
     </form>
