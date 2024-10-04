@@ -15,6 +15,8 @@ async function fetchActivity() {
         for (let i = 0; i < data.length; ++i) {
             let row = doc.createElement("tr");
 
+            row.class = "data";
+
             row.innerHTML += "<td>" + data[i].firstName + " " + data[i].lastName + "</td>";
             row.innerHTML += "<td>" + data[i].role + "</td>";
             row.innerHTML += "<td>" + data[i].subject + "</td>";
@@ -52,12 +54,12 @@ async function finish(i, valid) {
 
         // Show response
         if (data.error) {
-            info.innerHTML = data.error;
+            console.log("whoops");
         } else {
-            info.innerHTML = "Success!"
+            fetchActivity();
         }
 
     } catch {
-        info.innerHTML = "Something went very wrong. Please try again.";
+        console.log("Hahaha");
     }
 }
