@@ -29,10 +29,11 @@
         </select>
 
         <!-- Goal -->
-         <label>Mål med økten</label>
-        <input type="text" id="goal" required></input>
+        <label>Mål med økten   </label><label class="small">(max. 32 tegn)</label>
+        <input type="text" id="goal" maxlength="32" required></input>
 
         <button>Registrer</button>
+        <p id="info"></p>
     </form>
     
 </body>

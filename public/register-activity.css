@@ -13,3 +13,17 @@ select {
     display: block;
     margin-bottom: 1.5em;
 }
+
+p {
+    margin: auto 0;
+    color: #333;
+    float: right;
+    vertical-align: baseline;
+
+    padding: 0.4em 0.5em;
+}
+
+.small {
+    color: #888;
+    font-size: 0.8em;
+}

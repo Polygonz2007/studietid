@@ -11,7 +11,7 @@ const staticPath = path.join(__dirname, "public");
 
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(staticPath, "app.html"));
+    res.sendFile(path.join(staticPath, "homepage.html"));
 });
 
 app.get("/add-user", (req, res) => {
@@ -20,6 +20,12 @@ app.get("/add-user", (req, res) => {
 
 app.get("/register-activity", (req, res) => {
     res.sendFile(path.join(staticPath, "register-activity.html"));
+});
+
+
+// Admin
+app.get("/admin/activity-panel", (req, res) => {
+    res.sendFile(path.join(staticPath, "admin/activity-panel.html"));
 });
 
 
@@ -51,7 +57,7 @@ app.get("/get_options", (req, res) => {
     const subjects = sqlSubjects.all();
     result.subjects = subjects;
 
-    res.send(result);
+    res.json(result);
 });
 
 app.post("/add_user", (req, res) => {
@@ -75,11 +81,32 @@ app.post("/add_activity", (req, res) => {
 
     req = req.body;
 
-    const result = begin_activity();
+    const result = begin_activity(req.userId, req.subject, req.room, req.goal);
     if (result.error)
         res.json(result);
     else
         res.json("Added user successfully.");
+});
+
+app.post("/finish_activity", (req, res) => {
+    req = req.body;
+
+    const result = finish_activity(req.idActivity, 1, req.valid);
+});
+
+app.get("/get_activity", (req, res) => {
+    console.log("Get activity. Replying...");
+
+    const sql = db.prepare("SELECT firstName, lastName, role.name AS role, subject.name AS subject, room.name AS room, status.name AS status, goal, idAdmin FROM activity "
+                         + "INNER JOIN user ON user.id = idUser "
+                         + "INNER JOIN role ON role.id = idRole "
+                         + "INNER JOIN subject ON subject.id = idSubject "
+                         + "INNER JOIN room ON room.id = idRoom "
+                         + "INNER JOIN status ON status.id = idStatus "
+                         + "ORDER BY CASE WHEN status.id = 2 THEN 1 WHEN status.id = 1 THEN 2 WHEN status.id = 3 THEN 3 END ASC");
+    const data = sql.all();
+
+    res.json(data);
 });
 // END API //
 /////////////
@@ -125,19 +152,33 @@ function add_user(firstName, lastName, idRole, isAdmin, email)
     let rows = sql.all(info.lastInsertRowid)
     console.log("rows.length",rows.length)
 
-    return {} || {"error": "Something went wrong in the database. Try again later (sorry)"};
+    return 0 || {"error": "Something went wrong in the database. Try again later (sorry)"};
 }
 
 
 
-function begin_activity(idUser, idSubject, idRoom) {
-    let add_sql = db.prepare("INSERT INTO activity (idUser, startTime, idSubject, idRoom, idStatus) " +
-                             " values (?, ?, ?, ?, ?)");
-    const result = add_sql.run(idUser, Date(), idSubject, idRoom, 0);
+function begin_activity(idUser, idSubject, idRoom, goal) {
+    // Add the things
+    let add_sql = db.prepare("INSERT INTO activity (idUser, startTime, idSubject, idRoom, idStatus, goal) " +
+                             " values (?, ?, ?, ?, ?, ?)");
+    const result = add_sql.run(idUser, Date(), idSubject, idRoom, 2, goal);
+
+    // Check if it worked
+    if (result.changes !== 0)
+        return 0;
+    else
+        return {"error": "Database malfunction"};
 }
 
-function finish_activity(valid) {
-    
+function finish_activity(idActivity, idAdmin, valid) {
+    let finish_sql = db.prepare("UPDATE activity SET idAdmin = ?, idStatus = ? WHERE id = ?");
+    const result = finish_sql.run(idAdmin, valid ? 3 : 1, idActivity);
+
+    // Check if it worked
+    if (result.changes !== 0)
+        return 0;
+    else
+        return {"error": "Database malfunction"};
 }
 
 
