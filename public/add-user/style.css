@@ -1,0 +1,25 @@
+
+label {
+    float: left;
+}
+
+input {
+    margin-bottom: 1.5em;
+}
+
+p {
+    margin: auto 0;
+    color: #333;
+    float: right;
+    vertical-align: baseline;
+
+    padding: 0.4em 0.5em;
+}
+
+.error {
+    color: #FF5555;
+}
+
+.success {
+    color: #55CC55;
+}

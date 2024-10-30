@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css?family=League Spartan" rel="stylesheet">
+
+    <link href="./style.css" rel="stylesheet" />
+    <link href="../global.css" rel="stylesheet" />
+
+    <title>Registrer studietid</title>
+</head>
+
+<body>
+    <!-- Top bar -->
+    <div class="nav">
+        <h3>Studietid Amalie Skram</h3>
+        <a href="/home">Home</a>
+        <a href="/profile">Profil</a>
+    </div>
+
+    <!-- Page -->
+    <h1>Registrer studietid</h1>
+
+    <form>
+        <!-- Room -->
+        <label>Rom</label>
+        <select name="rom" id="room" required>
+            <option value="" selected="selected" id="none">Velg rom</option>
+        </select>
+
+        <!-- Subject -->
+         <label>Fag</label>
+        <select name="fag" id="subject" required>
+            <option value="" selected="selected" id="none">Velg fag</option>
+        </select>
+
+        <!-- Goal -->
+        <label>Mål med økten   </label><label class="small">(max. 32 tegn)</label>
+        <input type="text" id="goal" maxlength="32" required></input>
+
+        <button>Registrer</button>
+        <p id="info"></p>
+    </form>
+    
+</body>
+
+<script src="./script.js"></script>
+</html>
