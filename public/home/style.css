@@ -39,3 +39,27 @@ a {
 .selected {
     background-color: #C0D8FF;
 }
+
+.active {
+    color: #303030;
+}
+
+.finished {
+    color: #00A000;
+}
+
+.dismissed {
+    color: #A00000;
+}
+
+
+
+.big-button {
+    padding: 1em;
+    font-size: 1em;
+
+    background-color: #0D3C88;
+    color: #FFF;
+
+    border-radius: 0.25em;
+}

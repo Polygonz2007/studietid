@@ -1,6 +1,6 @@
 const doc = document;
-var error = doc.getElementById("error");
-var success = doc.getElementById("success");
+let error = doc.getElementById("error");
+let success = doc.getElementById("success");
 
 const user_form = doc.querySelector("form");
 
@@ -15,8 +15,8 @@ async function add_user(event) {
         first_name: user_form.first_name.value,
         last_name: user_form.last_name.value,
         id_role: 3,
-        is_admin: 0,
-        email: user_form.email.value 
+        email: user_form.email.value,
+        password: user_form.password.value
     };
 
     console.log("doin request")

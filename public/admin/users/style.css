@@ -1,0 +1,28 @@
+
+table {
+    margin: 0 auto;
+}
+
+th {
+    padding: 1em 1em;
+    text-align: left;
+}
+
+td {
+    padding: 0.2em 1em;
+    color: #333;
+
+    
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+a {
+    text-decoration: none;
+}

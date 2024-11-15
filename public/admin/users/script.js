@@ -1,13 +1,21 @@
 // Get user info and display
 const doc = document;
 
-var table = doc.querySelector("table");
+let table = doc.querySelector("table");
+let data;
 
-async function fetchActivity() {
+fetchUsers();
+
+const head = `<tr>
+                <th>Navn</th>
+                <th>Roller</th>
+            </tr>;`
+
+async function fetchUsers() {
     try {
         // Get activity
         let response = await fetch('/get_users'); 
-        let data = await response.json();
+        data = await response.json();
 
         //
         for (let i = 0; i < data.length; ++i) {

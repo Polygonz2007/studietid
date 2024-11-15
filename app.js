@@ -26,13 +26,11 @@ app.use(session({
 // Middleware to check if the user is logged in
 function checkLoggedIn(req, res, next) {
     console.log(req.path);
-    req.session.loggedIn = true;
-    if (req.path == "/login" || req.path == "/login/")
-        return;
+    if (req.path.startsWith("/login") || req.path == "/global.css")
+        return next();
 
     if (req.session.loggedIn) {
-        console.log('Bruker logget inn:', req.user);
-        next();
+        return next();
     } else {
         res.redirect('/login');
     }
@@ -40,14 +38,12 @@ function checkLoggedIn(req, res, next) {
 
 function checkAdmin(idUser) {
     const user = sqlm.getUserById(idUser);
-    return user.idRole == 3;
+    return user.idRole == 1;
 }
 
 // Rute for innlogging
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    //update user set password = '$2b$10$OaYrsjfSOxIlRl3l6brlTe4erojrTxjgsYSzUNF.uCa9Ny9XMmXoS'
-    //passord = Passord123
     
     // Finn brukeren basert på brukernavn
     const user = await sqlm.getUserByEmail(email); // Ensure this returns a promise
@@ -57,14 +53,16 @@ app.post('/login', async (req, res) => {
     }
 
     // Sjekk om passordet samsvarer med hash'en i databasen
-    console.log(password, user.password)
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (isMatch) {
         // Lagre innloggingsstatus i session
         req.session.loggedIn = true;
         req.session.idUser = user.id;
-        res.redirect('/home');
+        if (checkAdmin(user.id))
+            res.redirect('/admin');
+        else
+            res.redirect('/home');
     } else {
         res.status(401).send({"error": "Invalid password"});
     }
@@ -72,43 +70,33 @@ app.post('/login', async (req, res) => {
 
 
 app.all('*', checkLoggedIn);
+app.get("/", (req, res) => {
+    res.redirect("/home");
+});
 
 
 // Admin
 app.use("/admin/*", (req, res, next) => {
     if (!checkAdmin(req.session.idUser))
-        res.sendFile(path.join(staticPath, "access-deny"));
+        res.redirect("/access-deny");
     else
-        next();
+        return next();
 });
 
 app.get("/admin", (req, res) => {
-    res.redirect(path.join(staticPath, "admin/activity"));
+    res.redirect("/admin/activity");
 });
 
-//app.get("/admin/activity", (req, res) => {
-//    res.sendFile(path.join(staticPath, "admin/activity"));
-//});
-//
-//app.get("/admin/users", (req, res) => {
-//        res.sendFile(path.join(staticPath, "access-deny"));
-//});
 
 
 
 
-
-/////////
-// API //
+// API
 app.get("/get_users", (req, res) => {
-    console.log("/get_users/");
-
     res.send(sqlm.getUsers());
 });
 
 app.get("/get_options", (req, res) => {
-    console.log("/get_rooms");
-
     let result = {
         "rooms": null,
         "subjects": null
@@ -126,13 +114,9 @@ app.get("/get_options", (req, res) => {
 });
 
 app.post("/add_user", (req, res) => {
-    console.log("We got.. something");
-    console.log(req.body);
-    console.log("\nReceived request for adding new user.");
-
     req = req.body;
 
-    const result = add_user(req.first_name, req.last_name, req.id_role, req.is_admin, req.email);
+    const result = add_user(req.first_name, req.last_name, req.id_role, req.email, req.password);
     if (result.error)
         res.json(result);
     else
@@ -140,51 +124,43 @@ app.post("/add_user", (req, res) => {
 });
 
 app.post("/add_activity", (req, res) => {
-    console.log("We got.. something");
-    console.log(req.body);
-    console.log("\nReceived request for adding new activity user.");
-
-    req = req.body;
-
-    const result = begin_activity(req.userId, req.subject, req.room, req.goal);
+    const result = begin_activity(req.session.idUser, req.body.subject, req.body.room, req.body.goal);
     if (result.error)
         res.json(result);
     else
-        res.json("Added user successfully.");
+        res.redirect("/home");
 });
 
 app.post("/finish_activity", (req, res) => {
-    req = req.body;
+    const result = finish_activity(req.body.idActivity, req.session.idUser, req.body.valid);
 
-    const result = finish_activity(req.idActivity, 1, req.valid);
     if (result == 0)
         res.json("200");
     else
         res.json("Error");
 });
 
-app.get("/get_activity", (req, res) => {
-    console.log("Get activity. Replying...");
+app.post("/get_activity", (req, res) => {
+    // Få id til brukeren som spør etter aktivitet, hvis den trengs
+    if (req.body.filterType == "idUser")
+        req.body.idUser = req.session.idUser;
 
-    const sql = db.prepare("SELECT firstName, lastName, role.name AS role, subject.name AS subject, room.name AS room, status.name AS status, goal, idAdmin FROM activity "
-                         + "INNER JOIN user ON user.id = idUser "
-                         + "INNER JOIN role ON role.id = idRole "
-                         + "INNER JOIN subject ON subject.id = idSubject "
-                         + "INNER JOIN room ON room.id = idRoom "
-                         + "INNER JOIN status ON status.id = idStatus "
-                         + "ORDER BY CASE WHEN status.id = 2 THEN 1 WHEN status.id = 1 THEN 2 WHEN status.id = 3 THEN 3 END ASC");
-    const data = sql.all();
+    console.log("Brukeren er " + req.session.idUser + " og de vil ha " + req.body.filterType);
 
-    res.json(data);
+    res.json(sqlm.getActivity(req.body));
 });
-// END API //
-/////////////
+
+
+
+
+
+
+
 
 //
 // FUNCTIONS
-//
 function is_email_valid(email) {
-    const regex = /[A-za-z0-9]+@[a-z]+.[a-z]+/;
+    const regex = /[A-Za-z0-9]+@[a-z]+.[a-z]+/;
     const test = regex.test(email);
     
     return test;
@@ -200,8 +176,9 @@ function email_in_db(email) {
 
 //let result = addUser("Sander Kvandal", "Frøystein", 1, 0, "skfroystein@gmail.com")
 
-function add_user(firstName, lastName, idRole, isAdmin, email)
+function add_user(firstName, lastName, idRole, email, password)
  {
+    console.log("\n\n" + firstName + "\n" + lastName + "\n" + idRole + "\n" + email + "\n" + password);
     // check if email is valid
     if (!is_email_valid(email))
         return {"error": "Invalid email format"};
@@ -210,16 +187,17 @@ function add_user(firstName, lastName, idRole, isAdmin, email)
     if (email_in_db(email))
         return {"error": "Email already exists in database"};
 
-    console.log("HELLO?!?!?")
+    // Encrypt password
+    const saltRounds = 10;
+    const hash = bcrypt.hashSync(password, saltRounds);
 
     // Add to the database
-    let sql = db.prepare("INSERT INTO user (firstName, lastName, idRole, isAdmin, email) " + 
+    let sql = db.prepare("INSERT INTO user (firstName, lastName, idRole, email, password) " + 
                          " values (?, ?, ?, ?, ?)")
-    const info = sql.run(firstName, lastName, idRole, isAdmin, email)
+    const info = sql.run(firstName, lastName, idRole, email, hash)
     
     sql = db.prepare('SELECT user.id as userid, firstname, lastname, role.name  as role FROM user inner join role on user.idrole = role.id WHERE user.id  = ?');
     let rows = sql.all(info.lastInsertRowid)
-    console.log("rows.length", rows.length)
 
     return 0 || {"error": "Database error. Try again."};
 }

@@ -15,7 +15,6 @@ async function register(event) {
 
     // What we will send to the server
     const payload = {
-        userId: 1,
         room: form.room.selectedIndex,
         subject: form.subject.selectedIndex,
         goal: form.goal.value
@@ -45,7 +44,7 @@ async function register(event) {
         if (data.error) {
             info.innerHTML = data.error;
         } else {
-            info.innerHTML = "Success!"
+            window.location.href = response.url;
         }
 
     } catch {

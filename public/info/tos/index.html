@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css?family=League Spartan" rel="stylesheet">
+    <link href="./style.css" rel="stylesheet" />
+
+    <link href="/global.css" rel="stylesheet" />
+
+    <title>Terms of Service</title>
+</head>
+
+<body>
+    <h1 class="center">Terms of Service</h1>
+    <h2 class="center">Jeg kan ikke tro at du gidder å lese dette.</h2>
+    <br> <br>
+    <p>
+    <br>    <h3>Innledning</h3>
+    <br>    Appen heter «Studietid» og er laget for elever på Amalie Skram når de skal registrere studietid for å få øvd mer på fagstoff, samtidig som de får fjernet fravær fra karakterkortet sitt.
+    <br>    Appen gir elever mulighet til å logge inn med skole google kontoen sin, der de så kan registrere studietimer med fag, mål, og rom. Etter dette kommer en lærer til der eleven studerer og kan registrere at eleven faktisk var der, og da får de fjernet fravær på slutten av året.
+    <br>    
+    <br>    <h3>Personopplysninger</h3>
+    <br>    Navn: Vi lagrer navn for brukerene slik at vi det hvem det er og sånn at vi kan tilby studietid.
+    <br>    E-post: Vi lagrer e-post for brukerene slik at hver bruker har en unik epost, og sånn at vi kan sende epost til dem om viktige saker.
+    <br>    Passord (sensitiv): Vi lagrer passord slik at brukeren kan logge inn. Passordene er kryptert i databasen vår med bqrypt. Dette er fortsatt ikke veldig sikkert, spesielt når vi sender det ukrypterte passordet over nettet med http.
+    <br>    Data om studietimene: Vi lagrer rom, klokkeslett, dato, fag, og mål med studieøkten. Alt dette er for at vi kan verifisere at studietimen faktisk ble gjennomført, og for fremtidig dokumentasjon av studietimen. Dataen er linket til en brukerkonto.
+    <br>    
+    <br>
+    <br>    <h3>Beskyttelse av personopplysninger</h3>
+    <br>    All data blir lagret i en SQLite-3 database, der passord blir kryptert ved bqrypt før lagring.
+    <br>    Ingenting blir logget i programmet, unntatt feilmeldinger. Derfor er ikke dette noe problem.
+    <br>    Databasen er lagret på laptoppen min, som har BitLocker aktivert. Den er også sjeldent i en posisjon der den er i fare for å bli stjålet, unntatt mens jeg er på skolen og skal vaske hendene mine før jeg spiser.
+    <br>    Når brukeren logger inn / lager en bruker, blir de påminnet at når de bruker appen lagres personopplysninger som er nødvendig for at appen skal funke.
+    <br>    
+    <br>    
+    <br>    <h3>Tredjepartsbiblioteker</h3>
+    <br>    Studietid-appen bruker følgende biblioteker, installert via npm:
+    <br>    -	Better SQLite-3
+    <br>    -	Path
+    <br>    -	Express.js
+    <br>    -	Express Session
+    <br>    -	Bqrypt
+    <br>    Ved å bruke biblioteker installert via npm installeres også veldig mange tredjeparts-biblioteker i tillegg, og det er ofte vanskelig å vite om alle disse er helt trygge.
+    <br>    
+    <br>
+    <br>    <h3>Autentisering / Login</h3>
+    <br>    Appen bruker et eget login system. Det bruker bqrypt for å lage en hash av passordet man velger som lagres i databasen. Den bruker e-posten din for å vite hvilke bruker du logger inn på. Passordet ditt er skjult mens du skriver det inn.
+    <br>    Passordet blir sendt over internett ukryptert (med http) når du lager brukeren / prøver å logge inn. Dette er åpenbart veldig dårlig, og noe som burde fikses med å f.eks. bytte til https.
+    <br>    
+    <br>
+    <br>    <h3>Admin-tilgang</h3>
+    <br>    Alle admin-sider krever å være logget inn med en admin-bruker for å se dem. De har annerledes farger slik at administratorer vet når de er på admin siden. Kun Eirik og evt. Rektor skal ha admin brukere. Alle lærere skal ha «Lærer» bruker, som kan registrere studietid, men kan ikke redigere brukere og tillatelser.
+    <br>    
+    <br>
+    <br>    <h3>Sikkerhet av serveren</h3>
+    <br>    For øyeblikket er laptoppen min serveren. Laptoppen min har BitLocker på, så hvis jeg mister laptoppen min må folk vite passordet mitt for å kunne stjele data fra databasen og se på koden og finne hull i den. Unntatt passord er det ingenting som står mellom hvem som helst og databasen, som ikke er optimalt. Når dette blir lansert bør det være i et serverrom som er låst, som kanskje også har flere lag med passord for å få tilgang til databasen.
+    <br>    
+    <br>
+    <br>    <h3>GitHub CoPilot / annet KI:</h3>
+    <br>    Jeg har ikke brukt noe KI for å generere kode eller hjelpe med hvordan appen skal funke, og jeg har INGEN planer om å gjøre det heller.
+        </p>
+</body>
+</html>

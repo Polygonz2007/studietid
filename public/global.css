@@ -122,10 +122,18 @@ div.nav a {
     margin-left: 1em;
     margin-top: 1em;
 
-    color: #EEE;
+    color: #FFFFFFB0;
     text-decoration: none;
 
     text-align: center;
+}
+
+div.nav a:hover {
+    color: #FFFFFFD0;
+}
+
+div.nav .active {
+    color: #FFFFFFFF;
 }
 
 .right {
@@ -134,4 +142,20 @@ div.nav a {
 
 .center {
     text-align: center;
+}
+
+
+/* SELECTOR */
+.selector {
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: center;
+}
+
+div.selector input {
+    display: flex;
+    flex-basis: 8em;
+
+    margin: 0.2em;
 }

@@ -1,6 +1,6 @@
 const doc = document;
-var info = doc.getElementById("info");
-//var success = doc.getElementById("success");
+let info = doc.getElementById("info");
+//let success = doc.getElementById("success");
 
 const form = doc.querySelector("form");
 
