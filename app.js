@@ -26,7 +26,7 @@ app.use(session({
 // Middleware to check if the user is logged in
 function checkLoggedIn(req, res, next) {
     console.log(req.path);
-    if (req.path.startsWith("/login") || req.path == "/global.css")
+    if (req.path.startsWith("/login") || req.path == "/global.css" || req.path.startsWith("/info"))
         return next();
 
     if (req.session.loggedIn) {

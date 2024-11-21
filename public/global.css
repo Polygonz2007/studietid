@@ -101,6 +101,7 @@ button {
     padding: 0 1em;
 
     background-color: #56abef;
+    box-shadow: #000000FF 0 0 0.2em;
 }
 
 .admin {
