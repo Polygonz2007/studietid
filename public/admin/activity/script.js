@@ -51,7 +51,13 @@ async function fetchActivity(filter) {
             let row = doc.createElement("tr");
 
             row.id = i;
-            row.class = "data";
+            
+            if (data[i].status == "Bekreftet")
+                row.className = "finished";
+            else if (data[i].status == "Annulert")
+                row.className = "dismissed";
+            else
+                row.className = "active";
 
             row.innerHTML += "<td>" + data[i].firstName + " " + data[i].lastName + "</td>";
             row.innerHTML += "<td>" + data[i].subject + "</td>";

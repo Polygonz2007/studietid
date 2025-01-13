@@ -15,6 +15,52 @@ app.use(express.urlencoded({ extended: true })); // To parse urlencoded paramete
 const staticPath = path.join(__dirname, "public");
 
 
+const fs = require('fs');
+
+const lines = fs.readFileSync('data/grupper.csv', 'utf-8').split('\r\n');
+const student_lines = fs.readFileSync('data/elevdata.csv', 'utf-8').split('\r\n');
+
+let classes = {};
+let students = {};
+
+for (let i = 1; i < student_lines.length; ++i) {
+    const data = student_lines[i].split(",");
+    const student = { name: data[1] + " " + data[2], username: data[3], id: data[4] };
+
+    if (students[data[0]])
+        students[data[0]].students.push(student);
+    else {
+        students[data[0]].students = [student];
+        students[data[0]].classes = [];
+    }
+}
+
+for (let i = 0; i < lines.length - 1; i += 2) {
+    let line = lines[i];
+
+    let data = {};
+    const temp = line.split(';');
+
+    data["name"] = lines[i+1].split(";;")[1];
+    if (data["name"])
+        data["name"] = data["name"].split(",")[0]
+    data["code"] = temp[2];
+    data["groups"] = temp[3];
+    data["classes"] = temp[4].split(", ");
+
+    for (let i = 0; i < data["classes"].length; ++i) {
+        if (Object.keys(students).indexOf(students[data["classes"][i]]) !== -1)
+            students[data["classes"][i]].classes.push(data["code"]);
+    }
+
+    // Add class
+    classes[temp[1]] = data;
+}
+
+console.log(students);
+
+
+
 // Konfigurere session
 app.use(session({
     secret: 'hemmelig_nøkkel',
